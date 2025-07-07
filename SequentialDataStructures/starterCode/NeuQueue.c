@@ -18,8 +18,21 @@
  * fails.
  */
 NeuQueue *create_queue(size_t initial_capacity) {
-  // TODO: Implement this function
-  return NULL;
+  NeuQueue * queue = (NeuQueue*)malloc(sizeof(NeuQueue));
+  if (queue == NULL) {
+    return NULL;
+  }
+  queue->data = (int*)malloc(sizeof(int) * initial_capacity);
+  if (queue->data == NULL) {
+    free(queue);
+    return NULL;
+  } 
+  queue->front = 0;
+  queue->end = 0;
+  queue->size = 0;
+  queue->capacity = initial_capacity;
+
+  return queue;
 }
 
 /**
@@ -28,7 +41,10 @@ NeuQueue *create_queue(size_t initial_capacity) {
  * @param queue A pointer to the queue to be freed.
  */
 void free_queue(NeuQueue *queue) {
-  // TODO: Implement this function
+  if (queue != NULL) {
+    free(queue->data);
+    free(queue);
+  }
 }
 
 /**
@@ -38,8 +54,16 @@ void free_queue(NeuQueue *queue) {
  * @return The value of the removed element, or -1 if the queue is empty.
  */
 int dequeue(NeuQueue *queue) {
-  // TODO: Implement this function
-  return -1;
+  if(is_queue_empty(queue)) {
+    errno = ENODATA;
+    return -1;
+  }
+  errno = 0;
+  int value = queue->data[queue->front];
+  queue->front = (queue->front + 1) % queue->capacity; // fixes a range; wraps around
+  queue->size--;
+
+  return value;
 }
 
 /**
@@ -51,8 +75,16 @@ int dequeue(NeuQueue *queue) {
  * allocation fails.
  */
 bool enqueue(NeuQueue *queue, int value) {
-  // TODO: Implement this function
-  return false;
+  if (is_queue_full(queue)) {
+    errno = ENOSPC;
+    return false;
+  }
+  errno = 0;
+  queue->data[queue->end] = value;
+  queue->end = (queue->end + 1) % queue->capacity;
+  queue->size++;
+
+  return true;
 }
 
 /**
@@ -62,8 +94,7 @@ bool enqueue(NeuQueue *queue, int value) {
  * @return true if the queue is empty, false otherwise.
  */
 bool is_queue_empty(NeuQueue *queue) {
-  // TODO: Implement this function
-  return true;
+  return queue->size == 0;
 }
 
 /**
@@ -73,8 +104,7 @@ bool is_queue_empty(NeuQueue *queue) {
  * @return true if the queue is full, false otherwise.
  */
 bool is_queue_full(NeuQueue *queue) {
-  // TODO: Implement this function
-  return false;
+  return queue->size == queue->capacity;
 }
 
 /**
@@ -84,8 +114,7 @@ bool is_queue_full(NeuQueue *queue) {
  * @return The capacity of the queue.
  */
 int get_queue_capacity(NeuQueue *queue) {
-  // TODO: Implement this function
-  return 0;
+  return queue->capacity;
 }
 
 /**
@@ -95,8 +124,7 @@ int get_queue_capacity(NeuQueue *queue) {
  * @return The number of elements in the queue.
  */
 int get_queue_size(NeuQueue *queue) {
-  // TODO: Implement this function
-  return 0;
+  return queue->size;
 }
 
 /**
@@ -106,8 +134,10 @@ int get_queue_size(NeuQueue *queue) {
  * @return The value of the front element, or -1 if the queue is empty.
  */
 int peek_queue(NeuQueue *queue) {
-  // TODO: Implement this function
-  return -1;
+  if (is_queue_empty(queue)){
+    return -1;
+  }
+  return queue->data[queue->front];
 }
 
 /**

@@ -28,6 +28,7 @@ void test_add_elements() {
     } else {
         printf("Test failed: Elements not added correctly. %s\n", actual);
     }
+    //print_vector(vector);
     free((char *) actual); // Free the string representation
     free_vector(vector); // Free the vector
 }
@@ -116,13 +117,13 @@ int main(int argc, char* argv[]) {
         return EXIT_SUCCESS; // Exit after speed test
     } // else run other tests
     
-    /*
     test_add_elements(); // Test adding elements
     test_insert_elements(); // Test inserting elements
     
     test_remove_elements(); // Test removing elements
     test_pop_elements(); // Test popping elements
     test_push_elements(); // Test pushing elements
+    /*
     */
     return EXIT_SUCCESS;
     
