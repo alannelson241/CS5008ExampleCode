@@ -30,8 +30,8 @@ void swap(int *a, int *b) {
     Output: Mutates sorted array (A) in ascending order
 
     for i = 0 to n-1:
+        swapped = false
         for j = 0 to n-i-2:
-            swapped = false
             if A[j] > A[j+1]:
                 swap(A[j], A[j+1])
                 swapped = true
